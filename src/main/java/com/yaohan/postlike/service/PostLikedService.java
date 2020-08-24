@@ -8,7 +8,28 @@ import java.util.List;
 
 public interface PostLikedService {
 
-    void postLike(Integer videoId);
+    /**
+     * 一、不区分用户，仅考虑点赞
+     */
+    void postLike(String videoId);
+
+
+    /**
+     * 二、区分用户，考虑点赞状态，对某视频点赞，先判断该操作是点赞还是取消点赞，若为点赞，点赞数量加1，更改点赞状态为1
+     */
+    void postLikeV2(String userId, String videoId);
+
+
+    /**
+     * 查询某视频的点赞数
+     */
+    Integer queryLikeCount(String videoId);
+
+    /**
+     * 查询某用户对某视频的点赞状态
+     */
+    Integer queryLikeStatus(String userId, String videoId);
+
 
 //    /**
 //     * 保存点赞记录,即增加一条记录到用户点赞表UserLike

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" charset="UTF-8"/>
+    <title>diao yong</title>
+    <script src="/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+    <div style="margin: 10px;">
+        <label>输入你要点赞的视频ID</label>
+        <input type="text" id="videoId" style="width: 100px;"/>
+        <input type="button" id="btnRefresh" value="点赞"/>
+    </div>
+    <div style="margin: 10px;color: red;">
+        <label>该视频的最新点赞数量为：</label>
+        <div id="likeCount"></div>
+    </div>
+</body>
+</html>
+
+
+<script type="text/javascript">
+    $(function(){
+        $('#btnRefresh').click(function(){//按钮点击
+            $.ajax({
+                type: "POST",
+                url: "/postLike", //这里写接口地址，
+                dataType: "text",//返回json,text,html你自己定
+                data: {videoId:$("#videoId").val()}, //调用时的参数
+                cache:false,
+                success: function(data){ //成功
+                    $('#likeCount').html(data);
+                    // var html = '';
+                    // $.each(data, function(commentIndex, comment){
+                    //     html += '<div class="comment"><h6>' + comment['username']
+                    //         + ':</h6><p class="para"' + comment['content']
+                    //         + '</p></div>';
+                    // });
+                    // $('#resText').html(html);
+                },
+                error:function (){
+                    console.log("错误")
+                }
+            });
+        });
+    });
+</script>

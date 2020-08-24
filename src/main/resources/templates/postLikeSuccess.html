@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ceeee</title>
+    <script th:inline="javascript">
+        function getName(name){
+            console.log(name);
+        }
+    </script>
+</head>
+<body>
+    <span th:text="Hello"></span>
+    <hr/>
+    <button class="btn" th:onclick="getName([[${likeCount}]]);">点赞</button>
+    <hr/>
+    <span th:text="'视频id为: ' + ${videoId} + '的点赞数量更新为: ' + ${likeCount}"></span>
+
+</body>
+</html>

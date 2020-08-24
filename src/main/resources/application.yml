@@ -12,7 +12,6 @@ server:
     # 最大链接数
     max-connections: 1000
     #链接建立超时时间
-  connection-timeout: 10000
 
 
 spring:
@@ -43,3 +42,10 @@ spring:
         max-idle: 8
         min-idle: 0
     timeout: 0
+
+  mvc:
+    view:
+      prefix: templates/
+      suffix: .html
+
+    static-path-pattern=/static/**:

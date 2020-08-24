@@ -5,20 +5,21 @@ public class RedisKeyUtils {
     public static final String MAP_KEY_USER_LIKED = "MAP_USER_LIKED";
     //保存用户被点赞数量的key
     public static final String MAP_KEY_LIKED_COUNT = "MAP_LIKED_COUNT";
-
+    //保存点赞状态的key
+    public static final String MAP_KEY_LIKED_STATUS = "MAP_LIKED_STATUS";
 
 
     /**
      * 拼接被点赞的用户id和点赞的人的id作为key。格式 222222::333333
-     * @param likedUserId 被点赞的人id
-     * @param likedPostId 点赞的人的id
+     * @param userId
+     * @param videoId
      * @return
      */
-    public static String getLikedKey(String likedUserId, String likedPostId){
+    public static String getLikedKey(String userId, String videoId){
         StringBuilder builder = new StringBuilder();
-        builder.append(likedUserId);
+        builder.append(userId);
         builder.append("::");
-        builder.append(likedPostId);
+        builder.append(videoId);
         return builder.toString();
     }
 
