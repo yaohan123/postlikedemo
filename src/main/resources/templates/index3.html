@@ -14,10 +14,10 @@
         <input type="button" id="btnRefresh" value="点赞"/>
     </div>
     <div style="margin: 10px;color: red;">
-        <label>今日该用户对该视频的最新点赞次数为：</label>
-        <div id="userLikeTimes"></div>
+        <label>该视频的最新点赞数量为：</label>
+        <div id="likeCount"></div>
         <label>该用户对该视频的最新点赞状态为：</label>
-        <div id="max"></div>
+        <div id="likeStatus"></div>
     </div>
 </body>
 </html>
@@ -28,17 +28,13 @@
         $('#btnRefresh').click(function(){//按钮点击
             $.ajax({
                 type: "POST",
-                url: "/postLikeV2", //这里写接口地址，
+                url: "/postLikeV3", //这里写接口地址，
                 dataType: "json",//返回json,text,html你自己定
                 data: {userId:$("#userId").val(),videoId:$("#videoId").val()}, //调用时的参数
                 cache:false,
                 success: function(data){ //成功
-                    $('#userLikeTimes').html(data.userLikeTimes);
-                    if (data.max === true){
-                        $('#max').html("达到限制");
-                    }else {
-                        $('#max').html("未达到限制");
-                    }
+                    $('#likeCount').html(data.count);
+                    $('#likeStatus').html(data.status);
                 },
                 error:function (){
                     console.log("错误")

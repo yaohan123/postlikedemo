@@ -13,11 +13,15 @@ public interface PostLikedService {
      */
     void postLike(String videoId);
 
+    /**
+     * 二、区分用户，对某视频点赞，每天限制点赞次数
+     */
+    boolean postLikeV2(String userId, String videoId);
 
     /**
-     * 二、区分用户，考虑点赞状态，对某视频点赞，先判断该操作是点赞还是取消点赞，若为点赞，点赞数量加1，更改点赞状态为1
+     * 三、区分用户，考虑点赞状态，对某视频点赞，先判断该操作是点赞还是取消点赞，若为点赞，点赞数量加1，更改点赞状态为1
      */
-    void postLikeV2(String userId, String videoId);
+    void postLikeV3(String userId, String videoId);
 
 
     /**
@@ -29,6 +33,11 @@ public interface PostLikedService {
      * 查询某用户对某视频的点赞状态
      */
     Integer queryLikeStatus(String userId, String videoId);
+
+    /**
+     * 查询时间间隔内某用户对某视频的点赞次数
+     */
+    Integer queryUserLikeTimes(String userId, String videoId);
 
 
 //    /**

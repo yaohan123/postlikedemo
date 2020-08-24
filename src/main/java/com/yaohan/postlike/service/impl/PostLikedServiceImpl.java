@@ -1,5 +1,6 @@
 package com.yaohan.postlike.service.impl;
 
+import com.yaohan.postlike.config.UserPostLikeTimes;
 import com.yaohan.postlike.service.PostLikedService;
 import com.yaohan.postlike.utils.RedisKeyUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,9 @@ public class PostLikedServiceImpl implements PostLikedService {
     @Autowired
     StringRedisTemplate redisTemplate;
 
+    @Autowired
+    UserPostLikeTimes userPostLikeTimes;
+
     /**
      * 一、不区分用户，仅考虑点赞
      */
@@ -24,10 +28,31 @@ public class PostLikedServiceImpl implements PostLikedService {
     }
 
     /**
-     * 二、区分用户，考虑点赞状态，对某视频点赞，先判断该操作是点赞还是取消点赞，若为点赞，点赞数量加1，更改点赞状态为1
+     * 二、区分用户，对某视频点赞，每天限制点赞次数。点赞先查是否已经达到上限，达到上限返回true
      */
     @Override
-    public void postLikeV2(String userId, String videoId) {
+    public boolean postLikeV2(String userId, String videoId) {
+        Object obj = redisTemplate.opsForHash().get(RedisKeyUtils.MAP_KEY_USER_LIKED_TIMES,userId+"::"+videoId);
+        //不为null，且点赞次数达到上限，该操作限制
+        if(obj != null && Integer.parseInt(obj.toString()) == userPostLikeTimes.getTimes()){
+            return true;
+        }
+        //否则该操作为点赞
+        else {
+            redisTemplate.opsForHash().increment(RedisKeyUtils.MAP_KEY_LIKED_COUNT, videoId, 1);
+            redisTemplate.opsForHash().increment(RedisKeyUtils.MAP_KEY_USER_LIKED_TIMES, userId+"::"+videoId, 1);
+        }
+        return false;
+    }
+
+
+
+
+    /**
+     * 三、区分用户，考虑点赞状态，对某视频点赞，先判断该操作是点赞还是取消点赞，若为点赞，点赞数量加1，更改点赞状态为1
+     */
+    @Override
+    public void postLikeV3(String userId, String videoId) {
         Object obj = redisTemplate.opsForHash().get(RedisKeyUtils.MAP_KEY_LIKED_STATUS,userId+"::"+videoId);
         //不为null，且点赞状态值为1，说明之前点赞了，该操作为取消点赞
         if(obj != null && Integer.parseInt(obj.toString())==1){
@@ -66,6 +91,17 @@ public class PostLikedServiceImpl implements PostLikedService {
         else return 0;
     }
 
+    /**
+     * 查询时间间隔内某用户对某视频的点赞次数
+     */
+    @Override
+    public Integer queryUserLikeTimes(String userId, String videoId) {
+        Object obj = redisTemplate.opsForHash().get(RedisKeyUtils.MAP_KEY_USER_LIKED_TIMES,userId+"::"+videoId);
+        if(obj != null){
+            return Integer.parseInt(obj.toString());
+        }
+        else return 0;
+    }
 
     //    @Autowired
 //    UserLikeRepository likeRepository;

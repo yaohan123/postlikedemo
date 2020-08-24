@@ -2,25 +2,25 @@ package com.yaohan.postlike.dto;
 
 public class PostLikeV2Response {
 
-    //该视频现在的点赞数量
-    Integer count;
+    //该用户对该视频现在的点赞数量
+    Integer userLikeTimes;
 
-    //该用户对该视频现在的点赞状态
-    Integer status;
+    //今日该用户对该视频的点赞次数是否达到上限
+    boolean max;
 
-    public Integer getCount() {
-        return count;
+    public Integer getUserLikeTimes() {
+        return userLikeTimes;
     }
 
-    public void setCount(Integer count) {
-        this.count = count;
+    public void setUserLikeTimes(Integer userLikeTimes) {
+        this.userLikeTimes = userLikeTimes;
     }
 
-    public Integer getStatus() {
-        return status;
+    public boolean isMax() {
+        return max;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setMax(boolean max) {
+        this.max = max;
     }
 }

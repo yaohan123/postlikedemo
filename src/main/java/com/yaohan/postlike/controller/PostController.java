@@ -1,6 +1,7 @@
 package com.yaohan.postlike.controller;
 
 import com.yaohan.postlike.dto.PostLikeV2Response;
+import com.yaohan.postlike.dto.PostLikeV3Response;
 import com.yaohan.postlike.service.PostLikedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,9 +25,8 @@ public class PostController {
         return postLikedService.queryLikeCount(videoId);
     }
 
-
     /**
-     * 点赞2：区分用户对某视频点赞，区分点赞与未点赞状态，返回最新的点赞数量，以及点赞状态
+     * 点赞2：区分用户对某视频点赞，每天有最多点赞次数，返回最新的点赞数量，以及是否达到次数限制提示
      * @param videoId
      * @return
      */
@@ -35,7 +35,24 @@ public class PostController {
     public PostLikeV2Response PostLikeV2(@RequestParam(value = "userId",required = true) String userId,
                                          @RequestParam(value = "videoId",required = true) String videoId){
         PostLikeV2Response response = new PostLikeV2Response();
-        postLikedService.postLikeV2(userId, videoId);
+        boolean flag = postLikedService.postLikeV2(userId, videoId);
+        Integer times = postLikedService.queryUserLikeTimes(userId,videoId);
+        response.setUserLikeTimes(times);
+        response.setMax(flag);
+        return response;
+    }
+
+    /**
+     * 点赞3：区分用户对某视频点赞，区分点赞与未点赞状态，返回最新的点赞数量，以及点赞状态
+     * @param videoId
+     * @return
+     */
+    @RequestMapping(value = "/postLikeV3", method = RequestMethod.POST)
+    @ResponseBody
+    public PostLikeV3Response PostLikeV3(@RequestParam(value = "userId",required = true) String userId,
+                                         @RequestParam(value = "videoId",required = true) String videoId){
+        PostLikeV3Response response = new PostLikeV3Response();
+        postLikedService.postLikeV3(userId, videoId);
         Integer count = postLikedService.queryLikeCount(videoId);
         Integer status = postLikedService.queryLikeStatus(userId,videoId);
         response.setCount(count);
@@ -53,14 +70,24 @@ public class PostController {
     }
 
 
+    //不限制
     @RequestMapping(value = "/index", method = RequestMethod.GET)
     public String index(){
         return "index";
     }
 
+    //限制三次
     @RequestMapping(value = "/index2", method = RequestMethod.GET)
     public String index2(){
         return "index2";
     }
+
+    //限制状态
+    @RequestMapping(value = "/index3", method = RequestMethod.GET)
+    public String index3(){
+        return "index3";
+    }
+
+
 
 }

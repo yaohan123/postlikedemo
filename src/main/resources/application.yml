@@ -1,3 +1,11 @@
+
+userPostLike:
+  # 时间间隔，次数恢复时间，以小时为单位
+  intervalTime: 24
+  # 在时间间隔内，每个用户对某视频最大点赞次数
+  times: 3
+
+
 server:
   # 服务http端口
   port: 8090
@@ -12,7 +20,6 @@ server:
     # 最大链接数
     max-connections: 1000
     #链接建立超时时间
-
 
 spring:
   datasource:
@@ -47,5 +54,4 @@ spring:
     view:
       prefix: templates/
       suffix: .html
-
     static-path-pattern=/static/**:
